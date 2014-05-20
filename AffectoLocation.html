@@ -8,16 +8,17 @@
 </head>
 <body>
 	<div id="map" style="width:600px; height:400px"></div>
+	<p id="demo">Paspauskite mygtuka tam, kad gauti jusu vieta zemelapyje:</p>
+	<button onclick="getLocation()">Get My Location</button>
 	<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 	<script>
 
 		var map = L.map('map').setView([54.74121, 25.22298], 17);
+		var x = document.getElementById("demo");
 
 		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
 			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			attribution: '',
 			id: 'examples.map-i86knfo3'
 		}).addTo(map);
 
@@ -39,6 +40,37 @@
 */
 
 		var popup = L.popup();
+		
+		function getLocation()
+		 {
+		  if (navigator.geolocation)
+			{
+			navigator.geolocation.getCurrentPosition(showPosition);
+			}
+		  else{x.innerHTML="Geolocation is not supported by this browser.";}
+		  }
+		  
+		function showPosition(position)
+		  {
+			map.setView([position.coords.latitude, position.coords.longitude], 17);
+
+			L.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
+			.bindPopup("<b>Dabar zinau, kur tu gyveni:)! Tik neiseik is ribos</b>").openPopup();
+/*
+		L.circle([51.508, -0.11], 500, {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5
+		}).addTo(map).bindPopup("I am a circle.");
+
+		L.polygon([
+			[51.509, -0.08],
+			[51.503, -0.06],
+			[51.51, -0.047]
+		]).addTo(map).bindPopup("I am a polygon.");
+*/
+
+		  }
 /*
 		function onMapClick(e) {
 			popup
